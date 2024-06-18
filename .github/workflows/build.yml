@@ -62,15 +62,15 @@ jobs:
           fi
         fi
 
-    # - name: Upload the Docker image to the container registry
-    #   id: container_registry_upload
-    #   uses: mr-smithers-excellent/docker-build-push@v6
-    #   with:
-    #     image: ${{ env.IMAGE_NAME }}
-    #     tags: ${{ steps.get_version.outputs.VERSION }}, latest
-    #     registry: ${{ env.REGISTRY }}
-    #     pushImage: ${{ steps.check_version.outputs.PUSH_IMAGE }}
-    #     multiPlatform: true
-    #     platform: linux/amd64,linux/arm64
-    #     username: ${{ github.actor }}
-    #     password: ${{ secrets.GITHUB_TOKEN }}
+    - name: Upload the Docker image to the container registry
+      id: container_registry_upload
+      uses: mr-smithers-excellent/docker-build-push@v6
+      with:
+        image: ${{ env.IMAGE_NAME }}
+        tags: ${{ steps.get_version.outputs.VERSION }}, latest
+        registry: ${{ env.REGISTRY }}
+        pushImage: ${{ steps.check_version.outputs.PUSH_IMAGE }}
+        multiPlatform: true
+        platform: linux/amd64,linux/arm64
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
