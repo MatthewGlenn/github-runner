@@ -26,7 +26,7 @@ jobs:
     - name: Get the latest version number of the GHCR package
       id: get_version
       run: |
-        VERSION=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://ghcr.io/v2/actions/actions-runner/tags/list | jq -r '.[0].name')
+        VERSION=$(curl -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://ghcr.io/v2/actions/actions-runner/tags/list" | jq -r '.tags | last')
         echo "Latest version: $VERSION"
         echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
 
