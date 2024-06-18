@@ -64,13 +64,14 @@ jobs:
 
     - name: Upload the Docker image to the container registry
       id: container_registry_upload
+      if: steps.check_version.outputs.PUSH_IMAGE == 'true'
       uses: mr-smithers-excellent/docker-build-push@v6
       with:
         image: ${{ env.IMAGE_NAME }}
         tags: ${{ steps.get_version.outputs.VERSION }}, latest
         registry: ${{ env.REGISTRY }}
         pushImage: ${{ steps.check_version.outputs.PUSH_IMAGE }}
-        multiPlatform: true
+        multiPlatform: false
         platform: linux/amd64
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
