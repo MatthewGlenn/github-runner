@@ -1,5 +1,9 @@
 FROM debian:buster-slim
 
+# Set the image source from the repo url
+ARG REPO_URL
+LABEL org.opencontainers.image.source $REPO_URL
+
 ENV GITHUB_PAT ""
 ENV GITHUB_TOKEN ""
 ENV GITHUB_OWNER ""

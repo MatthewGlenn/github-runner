@@ -1,0 +1,82 @@
+name: Docker Image CI
+
+on:
+  pull_request:  
+    branches:
+      - master
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+  schedule:
+    - cron: '0 0 * * *'
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.event.repository.name }}
+  PACKAGE_NAME: github-runner
+
+jobs:
+  check_version_latest:
+    runs-on: ubuntu-latest
+    outputs:
+      VERSION: ${{ steps.get_version.outputs.VERSION }}
+      PUSH_IMAGE: ${{ steps.check_version.outputs.PUSH_IMAGE }}
+    steps:
+    - name: Check out the repo
+      uses: actions/checkout@v4
+
+    - name: Get the latest version number of the GHCR package
+      id: get_version
+      run: |
+        IMAGE_PATH=actions/actions-runner
+
+        echo "Store Token"
+        # get token ('{"token":"***"}' -> '***')
+        TOKEN="$(
+          curl "https://ghcr.io/token?scope=repository:${IMAGE_PATH}:pull" |
+          awk -F'"' '$0=$4'
+        )"
+
+        VERSION=$(curl -H "Authorization: Bearer ${TOKEN}" "https://ghcr.io/v2/${IMAGE_PATH}/tags/list" | jq -r '.tags | last')
+        echo "Latest version: $VERSION"
+        echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+
+    - name: Compare Version with last created package in the container registry
+      id: check_version
+      run: |
+        echo "Checking if the version exists in the container registry..."
+        echo "Version: ${{ steps.get_version.outputs.VERSION }}"
+
+        IMAGE=${{ env.REGISTRY }}/$(echo "${{ github.actor }}" | tr '[:upper:]' '[:lower:]')/${{ env.IMAGE_NAME }}:${{ steps.get_version.outputs.VERSION }}
+        echo "Image: $IMAGE"
+        
+        echo "PUSH_IMAGE=false" >> $GITHUB_OUTPUT
+
+        if docker manifest inspect $IMAGE > /dev/null 2>&1; then
+          echo "The version exists in the container registry."
+          echo "Skipping the push steps."
+        else
+          echo "This version does not exist in the container registry."
+          echo "PUSH_IMAGE=true" >> $GITHUB_OUTPUT
+        fi
+  
+  build_and_push_image:
+    runs-on: ubuntu-latest
+    needs: check_version_latest
+    if: needs.check_version_latest.outputs.PUSH_IMAGE == 'true' && github.event_name == 'schedule'
+    steps:
+    - name: Check out the repo
+      uses: actions/checkout@v4
+    - name: Upload the Docker image to the container registry
+      id: container_registry_upload
+      uses: mr-smithers-excellent/docker-build-push@v6
+      with:
+        image: ${{ env.IMAGE_NAME }}
+        tags: ${{ needs.check_version_latest.outputs.VERSION }}, latest
+        registry: ${{ env.REGISTRY }}
+        pushImage: ${{ needs.check_version_latest.outputs.PUSH_IMAGE }}
+        multiPlatform: false
+        platform: linux/amd64
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
