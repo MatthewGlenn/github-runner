@@ -75,7 +75,8 @@ jobs:
         image: ${{ env.IMAGE_NAME }}
         tags: ${{ needs.check_version_latest.outputs.VERSION }}, latest
         registry: ${{ env.REGISTRY }}
-        pushImage: ${{ needs.check_version_latest.outputs.PUSH_IMAGE }}
+        # pushImage: ${{ needs.check_version_latest.outputs.PUSH_IMAGE }}
+        pushImage: true
         multiPlatform: false
         platform: linux/amd64
         username: ${{ github.actor }}
