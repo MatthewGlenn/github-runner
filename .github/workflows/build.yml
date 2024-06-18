@@ -35,7 +35,7 @@ jobs:
           awk -F'"' '$0=$4'
         )"
 
-        VERSION=$(curl -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://ghcr.io/v2/${IMAGE_PATH}/tags/list" | jq -r '.tags | last')
+        VERSION=$(curl -H "Authorization: Bearer ${TOKEN}" "https://ghcr.io/v2/${IMAGE_PATH}/tags/list" | jq -r '.tags | last')
         echo "Latest version: $VERSION"
         echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
 
