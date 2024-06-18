@@ -9,9 +9,8 @@ on:
     branches:
       - master
   schedule:
-    # - cron: '0 0 * * *'
-    - cron: '* * * * *' #testing, run every minute
-
+    - cron: '0 0 * * *'
+    
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.event.repository.name }}
@@ -65,7 +64,7 @@ jobs:
   build_and_push_image:
     runs-on: ubuntu-latest
     needs: check_version_latest
-    if: needs.check_version_latest.outputs.PUSH_IMAGE == 'true' && github.event_name == 'schedule'
+    #if: needs.check_version_latest.outputs.PUSH_IMAGE == 'true' && github.event_name == 'schedule'
     steps:
     - name: Check out the repo
       uses: actions/checkout@v4
@@ -76,7 +75,8 @@ jobs:
         image: ${{ env.IMAGE_NAME }}
         tags: ${{ needs.check_version_latest.outputs.VERSION }}, latest
         registry: ${{ env.REGISTRY }}
-        pushImage: ${{ needs.check_version_latest.outputs.PUSH_IMAGE }}
+        # pushImage: ${{ needs.check_version_latest.outputs.PUSH_IMAGE }}
+        pushImage: true
         multiPlatform: false
         platform: linux/amd64
         username: ${{ github.actor }}
