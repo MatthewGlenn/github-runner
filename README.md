@@ -1,10 +1,10 @@
 # Github self-hosted runner Dockerfile and Kubernetes configuration
 
+**This is a fork of sanderknape repo that builds the github-runner automatically**
+
 [![awesome-runners](https://img.shields.io/badge/listed%20on-awesome--runners-blue.svg)](https://github.com/jonico/awesome-runners)
 
 This repository contains a Dockerfile that builds a Docker image suitable for running a [self-hosted GitHub runner](https://sanderknape.com/2020/03/self-hosted-github-actions-runner-kubernetes/). A Kubernetes Deployment file is also included that you can use as an example on how to deploy this container to a Kubernetes cluster.
-
-You can build this image yourself, or use the Docker image from the [Docker Hub](https://hub.docker.com/r/sanderknape/github-runner).
 
 ## Building the container
 
@@ -28,7 +28,7 @@ docker run --name github-runner \
      -e GITHUB_OWNER=username-or-organization \
      -e GITHUB_REPOSITORY=my-repository \
      -e GITHUB_PAT=[PAT] \
-     sanderknape/github-runner
+     ghcr.io/matthewglenn/github-runner:latest
 ```
 
 Register a runner with github token.
@@ -38,7 +38,7 @@ docker run --name github-runner \
      -e GITHUB_OWNER=username-or-organization \
      -e GITHUB_REPOSITORY=my-repository \
      -e GITHUB_TOKEN=[github.token] \
-     sanderknape/github-runner
+     ghcr.io/matthewglenn/github-runner:latest
 ```
 
 Create an organization-wide runner.
@@ -47,7 +47,7 @@ Create an organization-wide runner.
 docker run --name github-runner \
     -e GITHUB_OWNER=username-or-organization \
     -e GITHUB_PAT=[PAT] \
-    sanderknape/github-runner
+    ghcr.io/matthewglenn/github-runner:latest
 ```
 
 Set labels on the runner.
@@ -58,7 +58,7 @@ docker run --name github-runner \
     -e GITHUB_REPOSITORY=my-repository \
     -e GITHUB_PAT=[PAT] \
     -e RUNNER_LABELS=comma,separated,labels \
-    sanderknape/github-runner
+    ghcr.io/matthewglenn/github-runner:latest
 ```
 
 Install additional tools on the runner.
@@ -69,5 +69,5 @@ docker run --name github-runner \
     -e GITHUB_REPOSITORY=my-repository \
     -e GITHUB_PAT=[PAT] \
     -e ADDITIONAL_PACKAGES=firefox-esr,chromium \
-    sanderknape/github-runner
+    ghcr.io/matthewglenn/github-runner:latest
 ```
