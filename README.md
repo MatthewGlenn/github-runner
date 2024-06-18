@@ -2,7 +2,10 @@
 
 **This is a fork of sanderknape repo that builds the github-runner automatically**
 
-[![awesome-runners](https://img.shields.io/badge/listed%20on-awesome--runners-blue.svg)](https://github.com/jonico/awesome-runners)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/matthewglenn/github-runner/build.yaml)
+![Image Version](https://ghcr-badge.egpl.dev/matthewglenn/github-runner/latest_tag?color=%2344cc11&ignore=latest&label=version&trim=)
+
+
 
 This repository contains a Dockerfile that builds a Docker image suitable for running a [self-hosted GitHub runner](https://sanderknape.com/2020/03/self-hosted-github-actions-runner-kubernetes/). A Kubernetes Deployment file is also included that you can use as an example on how to deploy this container to a Kubernetes cluster.
 
