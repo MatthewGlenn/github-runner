@@ -1,4 +1,4 @@
-FROM debian:bookworm-slim
+FROM debian:bookworm
 
 # Set the image source from the repo url
 ARG REPO_URL
