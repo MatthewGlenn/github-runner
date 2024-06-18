@@ -26,7 +26,16 @@ jobs:
     - name: Get the latest version number of the GHCR package
       id: get_version
       run: |
-        VERSION=$(curl -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://ghcr.io/v2/actions/actions-runner/tags/list" | jq -r '.tags | last')
+        IMAGE_PATH=actions/actions-runner
+
+        echo "Store Token"
+        # get token ('{"token":"***"}' -> '***')
+        TOKEN="$(
+          curl "https://ghcr.io/token?scope=repository:${IMAGE_PATH}:pull" |
+          awk -F'"' '$0=$4'
+        )"
+
+        VERSION=$(curl -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://ghcr.io/v2/${IMAGE_PATH}/tags/list" | jq -r '.tags | last')
         echo "Latest version: $VERSION"
         echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
 
