@@ -1,10 +1,10 @@
 # Github self-hosted runner Dockerfile and Kubernetes configuration
 
-**This is a fork of sanderknape repo that builds the github-runner automatically**
+**This is a fork of @SanderKnape's repo that builds the github-runner automatically**
 
-![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/matthewglenn/github-runner/build.yaml)
-![Image Version](https://ghcr-badge.egpl.dev/matthewglenn/github-runner/latest_tag?color=%2344cc11&ignore=latest&label=version&trim=)
+[![Actions Status](https://github.com/actions/runner/workflows/Runner%20CI/badge.svg)](https://github.com/matthewglenn/github-runner/actions)
 
+![Image Version](https://ghcr-badge.egpl.dev/matthewglenn/github-runner/latest_tag?color=%2344cc11&ignore=latest&label=latest&trim=)
 
 
 This repository contains a Dockerfile that builds a Docker image suitable for running a [self-hosted GitHub runner](https://sanderknape.com/2020/03/self-hosted-github-actions-runner-kubernetes/). A Kubernetes Deployment file is also included that you can use as an example on how to deploy this container to a Kubernetes cluster.
